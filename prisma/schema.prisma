@@ -7,7 +7,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum GameStatus {
+  IDLE
+  IN_PROGRESS
+  GAME_OVER
+  GAME_OVER_DRAW
+}
+
 model Game {
-  id   String @id @default(cuid())
-  name String
+  id         String     @id @default(cuid())
+  status     GameStatus
+  players    User[]     @relation("games")
+  winner     User?      @relation(fields: [winnerId], references: [id])
+  field      Json
+  winnerId   String?
+  gameOverAt String?
+}
+
+model User {
+  id           String @id @default(cuid())
+  login        String
+  rating       Int
+  passwordHash String
+  games        Game[] @relation("games")
+  winnerGames  Game[]
 }
