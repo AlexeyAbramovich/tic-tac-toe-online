@@ -1,4 +1,4 @@
-import { GamesList } from "@/features/game-list/ui/games-list";
+import { GamesList } from "@/features/games-list/containers/games-list";
 
 export default async function Home() {
   return (
