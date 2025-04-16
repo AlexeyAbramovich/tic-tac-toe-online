@@ -1,6 +1,6 @@
 "use client";
 
-import { right } from "@/shared/lib/either";
+import { mapLeft, right } from "@/shared/lib/either";
 import { useActionState } from "@/shared/lib/react";
 import { Button } from "@/shared/ui/button";
 import { startTransition } from "react";
@@ -16,14 +16,14 @@ export function CreateButton() {
     <Button
       disabled={isPending}
       onClick={() => startTransition(dispatch)}
-      // error={mapLeft(
-      //   state,
-      //   (e) =>
-      //     ({
-      //       ["can-create-only-one-game"]: "Вы можете создать только одну игру",
-      //       ["user-not-found"]: "Пользователя нету",
-      //     })[e],
-      // )}
+      error={mapLeft(
+        state,
+        (e) =>
+          ({
+            ["can-create-only-one-game"]: "Вы можете создать только одну игру",
+            ["user-not-found"]: "Пользователя нету",
+          })[e],
+      )}
     >
       Создать игру
     </Button>

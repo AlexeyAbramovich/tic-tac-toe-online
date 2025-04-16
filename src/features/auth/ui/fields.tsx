@@ -3,18 +3,14 @@ import { Label } from "@/shared/ui/label";
 import { useId } from "react";
 
 type AuthFieldsProps = {
-  login: string;
-  password: string;
-  onChangeLogin: (login: string) => void;
-  onChangePassword: (login: string) => void;
+  formData?: FormData;
+  errors?: {
+    login?: string;
+    password?: string;
+  };
 };
 
-export function AuthFields({
-  login,
-  password,
-  onChangeLogin,
-  onChangePassword,
-}: AuthFieldsProps) {
+export function AuthFields({ formData, errors }: AuthFieldsProps) {
   const loginId = useId();
   const passwordId = useId();
   return (
@@ -23,23 +19,25 @@ export function AuthFields({
         <Label htmlFor={loginId}>Login</Label>
         <Input
           id={loginId}
+          defaultValue={formData?.get("login")?.toString()}
           type="login"
+          name="login"
           placeholder="Enter your login"
-          value={login}
-          onChange={(e) => onChangeLogin(e.target.value)}
           required
         />
+        {errors?.login && <div>{errors.login}</div>}
       </div>
       <div className="space-y-2">
         <Label htmlFor={passwordId}>Password</Label>
         <Input
           id={passwordId}
+          defaultValue={formData?.get("password")?.toString()}
           type="password"
+          name="password"
           placeholder="Enter your password"
-          value={password}
-          onChange={(e) => onChangePassword(e.target.value)}
           required
         />
+        {errors?.password && <div>{errors.password}</div>}
       </div>
     </>
   );
