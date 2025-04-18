@@ -9,7 +9,9 @@ type GameLayoutProps = {
 export function GameLayout({ status, players, field }: GameLayoutProps) {
   return (
     <Card>
-      <CardHeader></CardHeader>
+      <CardHeader>
+        <div className="text-lg font-bold">Крестики нолики 3х3</div>
+      </CardHeader>
       <CardContent className="flex flex-col gap-4">
         {players}
         {status}

@@ -1,7 +1,10 @@
+"use client";
+
 import { useEffect, useState } from "react";
 
-export function useEventSource<T>(url: string, def: T) {
-  const [data, setData] = useState<T>(def);
+export function useEventSource<T>(url: string) {
+  const [isPending, setPending] = useState(true);
+  const [data, setData] = useState<T>();
   const [error, setError] = useState<unknown | undefined>();
 
   useEffect(() => {
@@ -9,6 +12,7 @@ export function useEventSource<T>(url: string, def: T) {
 
     gameEvents.addEventListener("message", (message) => {
       try {
+        setPending(false);
         setData(JSON.parse(message.data));
         setError(undefined);
       } catch (e) {
@@ -16,10 +20,12 @@ export function useEventSource<T>(url: string, def: T) {
       }
     });
 
-    gameEvents.addEventListener("error", (e) => setError(e));
+    gameEvents.addEventListener("error", (e) => {
+      setError(e);
+    });
 
     return () => gameEvents.close();
   }, [url]);
 
-  return { dataStream: data, error };
+  return { dataStream: data, error, isPending };
 }

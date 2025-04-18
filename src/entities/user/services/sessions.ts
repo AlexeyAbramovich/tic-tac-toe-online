@@ -1,3 +1,4 @@
+import { routes } from "@/kernel/routes";
 import { left, right } from "@/shared/lib/either";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
@@ -47,7 +48,7 @@ async function verifySession() {
   const session = await decrypt(cookie);
 
   if (session.type === "left") {
-    redirect("/sign-in");
+    redirect(routes.signIn());
   }
 
   return { isAuth: true, session: session.value };

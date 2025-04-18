@@ -14,7 +14,7 @@ export function sseStream(req: NextRequest) {
 
   const close = () => writer.close();
 
-  const responce = new Response(responseStream.readable, {
+  const response = new Response(responseStream.readable, {
     headers: {
       "Content-Type": "text/event-stream",
       Connection: "keep-alive",
@@ -23,7 +23,7 @@ export function sseStream(req: NextRequest) {
   });
 
   return {
-    responce,
+    response,
     write,
     close,
     addCloseListener,

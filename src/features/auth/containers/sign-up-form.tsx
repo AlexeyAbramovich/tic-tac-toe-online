@@ -1,5 +1,6 @@
 "use client";
 
+import { routes } from "@/kernel/routes";
 import { useActionState } from "@/shared/lib/react";
 import { signUpAction, SignUpFormState } from "../actions/sign-up";
 import { AuthFormLayout } from "../ui/auth-form-layout";
@@ -25,7 +26,7 @@ export function SignUpForm() {
         <BottomLink
           text="Already have an account?"
           linkText="Sign In"
-          url="/sign-in"
+          url={routes.signIn()}
         />
       }
     />
