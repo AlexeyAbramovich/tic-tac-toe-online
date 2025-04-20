@@ -1,29 +1,35 @@
 import { GameId } from "@/kernel/ids";
 import { left, right } from "@/shared/lib/either";
-import { PlayerEntity } from "../domain";
+import { doStep, PlayerEntity } from "../domain";
 import { gameRepository } from "../repositories/game";
 import { gameEvents } from "./game-events";
 
-export async function surrenderGame(gameId: GameId, player: PlayerEntity) {
+export async function stepGame(
+  gameId: GameId,
+  player: PlayerEntity,
+  index: number,
+) {
   const game = await gameRepository.getGame({ id: gameId });
 
   if (!game) {
-    return left("game-not-found" as const);
+    return left("game-not-found");
   }
 
   if (game.status !== "IN_PROGRESS") {
-    return left("game-not-in-progress" as const);
+    return left("game-not-in-progress");
   }
 
   if (!game.players.some((p) => p.id === player.id)) {
-    return left("player-not-in-game" as const);
+    return left("player-not-in-game");
   }
 
-  const newGame = await gameRepository.saveGame({
-    ...game,
-    status: "GAME_OVER",
-    winner: game.players.find((p) => p.id !== player.id)!,
-  });
+  const stepResult = doStep({ game, player, index });
+
+  if (stepResult.type === "left") {
+    return stepResult;
+  }
+
+  const newGame = await gameRepository.saveGame(stepResult.value);
 
   await gameEvents.emit({ type: "game-changed", data: newGame });
 

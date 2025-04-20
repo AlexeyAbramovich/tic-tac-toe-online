@@ -6,7 +6,7 @@ export function sseStream(req: NextRequest) {
   const encoder = new TextEncoder();
 
   const write = (data: unknown) =>
-    writer.write(encoder.encode(`data: ${JSON.stringify(data)}\n\n}`));
+    writer.write(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
 
   const addCloseListener = (onDisconnect: () => void) => {
     req.signal.addEventListener("abort", () => onDisconnect());

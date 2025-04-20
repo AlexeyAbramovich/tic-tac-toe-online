@@ -14,7 +14,7 @@ export function GameField({
       {game.field.map((symbol, index) => (
         <button
           key={index}
-          className="border border-primary w-20 h-20 flex justify-center items-center"
+          className="border border-primary w-20 h-20 flex justify-center items-center text-5xl"
           onClick={() => onCellClick?.(index)}
         >
           {symbol ?? ""}
