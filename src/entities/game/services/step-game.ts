@@ -1,3 +1,4 @@
+import { updatePlayersRating } from "@/entities/user/server";
 import { GameId } from "@/kernel/ids";
 import { left, right } from "@/shared/lib/either";
 import { doStep, PlayerEntity } from "../domain";
@@ -27,6 +28,13 @@ export async function stepGame(
 
   if (stepResult.type === "left") {
     return stepResult;
+  }
+
+  if (stepResult.value.status === "GAME_OVER") {
+    await updatePlayersRating(
+      player,
+      game.players.find((p) => p.id !== player.id)!,
+    );
   }
 
   const newGame = await gameRepository.saveGame(stepResult.value);

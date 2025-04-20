@@ -14,7 +14,7 @@ export type SessionEntity = {
   expiredAt: string;
 };
 
-export const DEFAULT_RATING = 1000;
+export const DEFAULT_RATING = 100;
 
 export const userToSession = (
   user: UserEntity,
@@ -25,4 +25,11 @@ export const userToSession = (
     login: user.login,
     expiredAt,
   };
+};
+
+export const getNewRating = (winnerRating: number, loserRating: number) => {
+  const newWinnerRating = winnerRating + 50;
+  const newLoserRating = loserRating - 50 > 0 ? loserRating - 50 : 0;
+
+  return [newWinnerRating, newLoserRating];
 };

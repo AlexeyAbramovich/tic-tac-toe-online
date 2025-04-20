@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 export async function createdGameAction() {
   const user = await getCurrentUser();
 
-  if (!user) return left("user-not-found" as const);
+  if (!user) return left("user-not-found");
 
   const createdGame = await createGame(user);
 

@@ -1,5 +1,5 @@
 import { left, right } from "@/shared/lib/either";
-import { getUser } from "../repositories/user";
+import { userRepository } from "../repositories/user";
 import { passwordService } from "./passwords";
 
 export async function verifyUserPassword({
@@ -9,10 +9,10 @@ export async function verifyUserPassword({
   login: string;
   password: string;
 }) {
-  const user = await getUser({ login });
+  const user = await userRepository.getUser({ login });
 
   if (!user) {
-    return left("wrong-login-or-password" as const);
+    return left("wrong-login-or-password");
   }
 
   const isVarified = await passwordService.comparePasswords({
@@ -22,7 +22,7 @@ export async function verifyUserPassword({
   });
 
   if (!isVarified) {
-    return left("wrong-login-or-password" as const);
+    return left("wrong-login-or-password");
   }
 
   return right(user);

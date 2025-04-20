@@ -8,15 +8,15 @@ export async function startGame(gameId: GameId, player: PlayerEntity) {
   const game = await gameRepository.getGame({ id: gameId });
 
   if (!game) {
-    return left("game-not-found" as const);
+    return left("game-not-found");
   }
 
   if (game.status !== "IDLE") {
-    return left("game-already-started" as const);
+    return left("game-already-started");
   }
 
   if (game.creator.id === player.id) {
-    return left("creator-can't-start-game" as const);
+    return left("creator-can't-start-game");
   }
 
   const newGame = await gameRepository.startGame(gameId, player);

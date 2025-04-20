@@ -1,3 +1,4 @@
+import { updatePlayersRating } from "@/entities/user/server";
 import { GameId } from "@/kernel/ids";
 import { left, right } from "@/shared/lib/either";
 import { PlayerEntity } from "../domain";
@@ -8,22 +9,26 @@ export async function surrenderGame(gameId: GameId, player: PlayerEntity) {
   const game = await gameRepository.getGame({ id: gameId });
 
   if (!game) {
-    return left("game-not-found" as const);
+    return left("game-not-found");
   }
 
   if (game.status !== "IN_PROGRESS") {
-    return left("game-not-in-progress" as const);
+    return left("game-not-in-progress");
   }
 
   if (!game.players.some((p) => p.id === player.id)) {
-    return left("player-not-in-game" as const);
+    return left("player-not-in-game");
   }
+
+  const winner = game.players.find((p) => p.id !== player.id);
 
   const newGame = await gameRepository.saveGame({
     ...game,
     status: "GAME_OVER",
-    winner: game.players.find((p) => p.id !== player.id)!,
+    winner: winner!,
   });
+
+  await updatePlayersRating(winner!, player);
 
   await gameEvents.emit({ type: "game-changed", data: newGame });
 
