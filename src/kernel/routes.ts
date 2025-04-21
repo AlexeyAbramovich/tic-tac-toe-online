@@ -6,4 +6,6 @@ export const routes = {
   game: (gameId: GameId) => `/game/${gameId}`,
   gameStream: (gameId: GameId) => `/game/${gameId}/stream`,
   gamesStream: () => `/games/stream`,
+  leaderBoard: () => "/leaderboard",
+  playersStream: () => `/leaderboard/stream`,
 };

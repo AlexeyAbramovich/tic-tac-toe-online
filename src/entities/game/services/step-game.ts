@@ -1,4 +1,7 @@
-import { updatePlayersRating } from "@/entities/user/server";
+import {
+  updatePlayersRating,
+  updatePlayersTable,
+} from "@/entities/user/server";
 import { GameId } from "@/kernel/ids";
 import { left, right } from "@/shared/lib/either";
 import { doStep, PlayerEntity } from "../domain";
@@ -40,6 +43,8 @@ export async function stepGame(
   const newGame = await gameRepository.saveGame(stepResult.value);
 
   await gameEvents.emit({ type: "game-changed", data: newGame });
+
+  await updatePlayersTable();
 
   return right(newGame);
 }

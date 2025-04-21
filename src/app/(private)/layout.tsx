@@ -20,6 +20,9 @@ export default async function PrivateLayout({
         </div>
         <div className="flex gap-4 items-center">
           <div className="text-lg">{session.login}</div>
+          <Link href={routes.leaderBoard()}>
+            <Button>Таблица лидеров</Button>
+          </Link>
           <form
             action={async () => {
               "use server";

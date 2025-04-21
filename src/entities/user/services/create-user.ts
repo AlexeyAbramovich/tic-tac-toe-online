@@ -3,6 +3,7 @@ import cuid from "cuid";
 import { DEFAULT_RATING } from "../domain";
 import { userRepository } from "../repositories/user";
 import { passwordService } from "./passwords";
+import { updatePlayersTable } from "./update-players-table";
 
 export const createUser = async ({
   login,
@@ -26,6 +27,8 @@ export const createUser = async ({
     passwordHash: hash,
     salt,
   });
+
+  await updatePlayersTable();
 
   return right(user);
 };

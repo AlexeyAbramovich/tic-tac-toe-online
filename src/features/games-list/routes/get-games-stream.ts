@@ -7,7 +7,7 @@ export async function getGamesStreamRoute(req: NextRequest) {
   const user = await getCurrentUser();
 
   if (!user) {
-    return new Response("Unauthorized", { status: 401 });
+    return new Response("User not found", { status: 404 });
   }
 
   const { response, write, addCloseListener } = sseStream(req);
